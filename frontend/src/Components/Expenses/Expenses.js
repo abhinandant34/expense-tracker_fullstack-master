@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import styled from 'styled-components'
 import { useGlobalContext } from '../../context/globalContext';
 import { InnerLayout } from '../../styles/Layouts';
@@ -8,10 +8,10 @@ import ExpenseForm from './ExpenseForm';
 import { rupee } from '../../utils/Icons';
 
 function Expenses() {
-    const {addIncome,expenses, getExpenses, deleteExpense, totalExpenses} = useGlobalContext()
+    const {addIncome,expenses, getExpenses, deleteExpense, totalExpenses,username} = useGlobalContext()
 
     useEffect(() =>{
-        getExpenses()
+        getExpenses(username)
     }, [])
     return (
         <ExpenseStyled>

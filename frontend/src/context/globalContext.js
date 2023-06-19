@@ -12,6 +12,7 @@ export const GlobalProvider = ({children}) => {
     const [incomes, setIncomes] = useState([])
     const [expenses, setExpenses] = useState([])
     const [users, setUsers]= useState([])
+    const [username, setUsername]= useState([])
     const [error, setError] = useState(null)
 
     //calculate incomes
@@ -23,8 +24,8 @@ export const GlobalProvider = ({children}) => {
         getIncomes()
     }
 
-    const getIncomes = async () => {
-        const response = await axios.get(`${BASE_URL}get-incomes`)
+    const getIncomes = async (username) => {
+        const response = await axios.get(`${BASE_URL}get-incomes/${username}`)     
         setIncomes(response.data)
         console.log(response.data)
     }
@@ -53,8 +54,8 @@ export const GlobalProvider = ({children}) => {
         getExpenses()
     }
 
-    const getExpenses = async () => {
-        const response = await axios.get(`${BASE_URL}get-expenses`)
+    const getExpenses = async (username) => {
+        const response = await axios.get(`${BASE_URL}get-expenses/${username}`)
         setExpenses(response.data)
         console.log(response.data)
     }
@@ -94,22 +95,25 @@ export const GlobalProvider = ({children}) => {
             .catch((err) =>{
                 setError(err.response.data.message)
             })
-        // getUser()
-    }
-
-    // const getUser = async () => {
-    //     const response = await axios.get(`${BASE_URL}get-user`)
-    //     setUser(response.data)
-    //     console.log(response.data)
-    // }
+    }   
 
     const authUser = async (user) => {
-        const response = await axios.post(`${BASE_URL}auth-user`, user)
-        setUsers(response.data)
+        const response = await axios.post(`${BASE_URL}auth-user`, user)  
         .catch((err) =>{
             setError(err.response.data.message)
         })
+        setUsername(response.data.username)
+        // if (response.data.redirectTo === '/dashboard') {
+        //     history.push('/dashboard');
+        //   }
       }
+      
+    // const getUser = async (username) => {
+    //     console.log(username)
+    //     const response = await axios.get(`${BASE_URL}get-user/${username}`)
+    //     setUsers(response.data)
+    //     console.log(response.data)
+    // }
       
     return (
         <GlobalContext.Provider value={{
@@ -128,6 +132,7 @@ export const GlobalProvider = ({children}) => {
             addUser,
             // getUser,
             authUser,
+            username,
             users,
             error,
             setError,

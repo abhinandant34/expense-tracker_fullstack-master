@@ -9,10 +9,11 @@ import Income from './Components/Income/Income'
 import Expenses from './Components/Expenses/Expenses';
 import Signup from './Components/Signup/Signup';
 import Login from './Components/Login/Login';
-
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useGlobalContext } from './context/globalContext';
 
 function App() {
+  const {username} = useGlobalContext()
   const [active, setActive] = useState(1)
 
   const global = useGlobalContext()
@@ -26,10 +27,6 @@ function App() {
         return <Income />
       case 3:
         return <Expenses />
-      case 4:
-        return <Signup />
-      case 5:
-        return <Login />
       default: 
         return <Dashboard />
     }
@@ -42,12 +39,24 @@ function App() {
   return (
     <AppStyled bg={bg} className="App">
       {orbMemo}
-      <MainLayout>
-        <Navigation active={active} setActive={setActive} />
-        <main>
-          {displayData()}
-        </main>
-      </MainLayout>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />}/>
+             <Route path="/signup" element={<Signup/>}/>   {/*username ? <Navigate to='/dashboard'/> :  */}
+            {console.log("app ", username)}
+            <Route path="/dashboard" element={ 
+              <MainLayout>
+                <Navigation 
+                      active={active} 
+                      setActive={setActive} 
+                      user={username}
+                />
+                  <main>
+                    {displayData()}
+                  </main>
+              </MainLayout> }/>
+            </Routes>
+        </BrowserRouter>
     </AppStyled>
   );
 }

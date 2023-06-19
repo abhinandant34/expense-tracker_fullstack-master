@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import styled from 'styled-components'
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
+import { Link,useNavigate } from 'react-router-dom';
 
 function Signup() {
   const {addUser, error, setError} = useGlobalContext()
@@ -10,6 +11,7 @@ function Signup() {
       username: '',
       password: '',
   })
+ const navigate=useNavigate(); 
 
   const {name, username, password } = inputState;
 
@@ -26,6 +28,8 @@ function Signup() {
         username: '',
         password: '',
       })
+            // Navigate to the login page
+            navigate("/");
   }
 
   return (
@@ -67,6 +71,7 @@ function Signup() {
                   color={'#fff'}
               />
           </div>
+          <p>Already have an account? <Link to="/">SignIn</Link></p>
       </FormStyled>
   )
 }
@@ -78,7 +83,8 @@ const FormStyled = styled.form`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  height:80vh;
+  width:100vw;
+  height:90vh;
   input, textarea, select{
       font-family: inherit;
       font-size: inherit;

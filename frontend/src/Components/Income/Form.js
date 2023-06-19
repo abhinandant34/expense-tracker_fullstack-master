@@ -8,7 +8,7 @@ import { plus } from '../../utils/Icons';
 
 
 function Form() {
-    const {addIncome, getIncomes, error, setError} = useGlobalContext()
+    const {addIncome, getIncomes, error, setError,username} = useGlobalContext()
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
@@ -25,7 +25,7 @@ function Form() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        addIncome(inputState)
+        addIncome({title: username, amount: amount, date: date, description: description})
         setInputState({
             title: '',
             amount: '',
@@ -40,10 +40,11 @@ function Form() {
             <div className="input-control">
                 <input 
                     type="text" 
-                    value={title}
+                    value={username}
                     name={'title'} 
                     placeholder="Salary Title"
-                    onChange={handleInput('title')}
+                    readOnly={true}
+                    onChange={handleInput('title')}                    
                 />
             </div>
             <div className="input-control">

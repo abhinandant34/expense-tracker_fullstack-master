@@ -7,11 +7,11 @@ import { rupee } from '../../utils/Icons';
 import Chart from '../Chart/Chart';
 
 function Dashboard() {
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses } = useGlobalContext()
+    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses,username } = useGlobalContext()
 
     useEffect(() => {
-        getIncomes()
-        getExpenses()
+        getIncomes(username)
+        getExpenses(username)
     }, [])
 
     return (

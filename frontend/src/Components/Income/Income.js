@@ -7,10 +7,10 @@ import IncomeItem from '../IncomeItem/IncomeItem';
 import { rupee } from '../../utils/Icons';
 
 function Income() {
-    const {addIncome,incomes, getIncomes, deleteIncome, totalIncome} = useGlobalContext()
-
+    const {addIncome,incomes, getIncomes, deleteIncome, totalIncome,username} = useGlobalContext()
+        // console.log("USERNAME : ",username);
     useEffect(() =>{
-        getIncomes()
+        getIncomes(username)
     }, [])
     return (
         <IncomeStyled>

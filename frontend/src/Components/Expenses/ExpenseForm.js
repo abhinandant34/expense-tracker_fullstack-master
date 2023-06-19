@@ -8,7 +8,7 @@ import { plus } from '../../utils/Icons';
 
 
 function ExpenseForm() {
-    const {addExpense, error, setError} = useGlobalContext()
+    const {addExpense, error, setError,username} = useGlobalContext()
     const [inputState, setInputState] = useState({
         title: '',
         amount: '',
@@ -26,7 +26,7 @@ function ExpenseForm() {
 
     const handleSubmit = e => {
         e.preventDefault()
-        addExpense(inputState)
+        addExpense({title: username, amount: amount, date: date, description: description})
         setInputState({
             title: '',
             amount: '',
@@ -42,9 +42,10 @@ function ExpenseForm() {
             <div className="input-control">
                 <input 
                     type="text" 
-                    value={title}
+                    value={username}
                     name={'title'} 
                     placeholder="Expense Title"
+                    readOnly={true}
                     onChange={handleInput('title')}
                 />
             </div>

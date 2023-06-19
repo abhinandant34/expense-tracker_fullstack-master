@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import avatar from '../../img/avatar.png'
 import { signout } from '../../utils/Icons'
 import { menuItems } from '../../utils/menuItems'
+import { useGlobalContext } from '../../context/globalContext';
+import {useNavigate } from 'react-router-dom';
 
-function Navigation({active, setActive}) {
-    
+function Navigation({active, setActive,user}) {
+    const {username} = useGlobalContext()
+    const navigate=useNavigate();
+    const handleLogout = () => {
+        // Clear the username variable
+        // username = "";      
+        navigate("/");
+      }
     return (
         <NavStyled>
             <div className="user-con">
                 <img src={avatar} alt="" />
                 <div className="text">
-                    <h2>Mike</h2>
-                    <p>Your Money</p>
+                    <h2>{username}</h2>
                 </div>
             </div>
             <ul className="menu-items">
@@ -28,7 +35,7 @@ function Navigation({active, setActive}) {
                 })}
             </ul>
             <div className="bottom-nav">
-                <li>
+                <li onClick={handleLogout}>
                     {signout} Sign Out
                 </li>
             </div>

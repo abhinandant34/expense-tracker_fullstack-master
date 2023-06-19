@@ -24,10 +24,21 @@ export const GlobalProvider = ({children}) => {
         getIncomes()
     }
 
+    const getallIncomes = async (username) => {
+        const response = await axios.get(`${BASE_URL}get-all-incomes/`)     
+        setIncomes(response.data)
+        console.log(response.data)
+    }
+
     const getIncomes = async (username) => {
+        if(username==='admin')
+          getallIncomes()
+        else
+        {
         const response = await axios.get(`${BASE_URL}get-incomes/${username}`)     
         setIncomes(response.data)
         console.log(response.data)
+        }
     }
 
     const deleteIncome = async (id) => {
@@ -54,10 +65,21 @@ export const GlobalProvider = ({children}) => {
         getExpenses()
     }
 
+    const getallExpenses = async () => {
+        const response = await axios.get(`${BASE_URL}get-all-expenses`)
+        setExpenses(response.data)
+        console.log(response.data)
+    }
+
     const getExpenses = async (username) => {
+        if(username==='admin')
+        getallExpenses()
+        else
+        {
         const response = await axios.get(`${BASE_URL}get-expenses/${username}`)
         setExpenses(response.data)
         console.log(response.data)
+        }
     }
 
     const deleteExpense = async (id) => {

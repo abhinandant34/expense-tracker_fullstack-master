@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect,useState } from 'react'
 import styled from 'styled-components'
 import { useGlobalContext } from '../../context/globalContext';
 import History from '../../History/History';
@@ -7,13 +7,17 @@ import { rupee } from '../../utils/Icons';
 import Chart from '../Chart/Chart';
 
 function Dashboard() {
+    const [incomesLoaded, setIncomesLoaded] = useState(false);
+    const [expensesLoaded, setExpensesLoaded] = useState(false);  
     const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses,username } = useGlobalContext()
-
+  
     useEffect(() => {
         getIncomes(username)
         getExpenses(username)
-    }, [])
-
+        setIncomesLoaded(true)
+        setExpensesLoaded(true)
+      }, [])
+  
     return (
         <DashboardStyled>
             <InnerLayout>

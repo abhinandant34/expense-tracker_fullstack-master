@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import DatePicker from 'react-datepicker'
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,15 +8,16 @@ import { plus } from '../../utils/Icons';
 
 
 function Form() {
+
     const {addIncome, getIncomes, error, setError,username} = useGlobalContext()
     const [inputState, setInputState] = useState({
-        title: '',
+        // title: '',
         amount: '',
         date: '',
         description: '',
     })
 
-    const { title, amount, date,description } = inputState;
+    const { amount, date,description } = inputState;
 
     const handleInput = name => e => {
         setInputState({...inputState, [name]: e.target.value})
@@ -32,6 +33,7 @@ function Form() {
             date: '',
             description: '',
         })
+
     }
 
     return (

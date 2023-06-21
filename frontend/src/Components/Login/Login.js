@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useGlobalContext } from '../../context/globalContext';
 import Button from '../Button/Button';
 import { Link,useNavigate } from 'react-router-dom';
+
 
 function Login() {
   const {authUser, error, setError} = useGlobalContext()
@@ -27,8 +28,14 @@ function Login() {
         password: '',
       })
 
-        navigate("/dashboard");
+      navigate("/dashboard");
   }
+//   useEffect(() => {
+//     if (authUser(inputState)) {
+//       // res.redirect('/dashboard');
+//       navigate("/dashboard");
+//     }
+//   }, [authUser, inputState])
 
   return (
       <FormStyled onSubmit={handleSubmit}>

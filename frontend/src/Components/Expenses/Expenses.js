@@ -8,11 +8,11 @@ import ExpenseForm from './ExpenseForm';
 import { rupee } from '../../utils/Icons';
 
 function Expenses() {
-    const {addIncome,expenses, getExpenses, deleteExpense, totalExpenses,username} = useGlobalContext()
+    const {addExpense,expenses, getExpenses, deleteExpense, totalExpenses,username} = useGlobalContext()
 
     useEffect(() =>{
         getExpenses(username)
-    }, [])
+    }, [addExpense])
     return (
         <ExpenseStyled>
             <InnerLayout>

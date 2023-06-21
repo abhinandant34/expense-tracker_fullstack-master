@@ -13,11 +13,11 @@ exports.authUser = async (req, res) =>{
             })
     }
     else {
-        res.status(401).json({ message: 'Wrong username or password' });
+        res.status(400).json({ message: 'Wrong username or password' });
       }
     }
     catch(error) {
-        res.status(500).json({message: 'Wrong username or password'})    
+        res.status(500).json({message: 'Server Error'})    
   }
 }
 

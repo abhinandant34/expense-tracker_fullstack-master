@@ -54,6 +54,7 @@ const NavStyled = styled.nav`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    cursor: pointer;
     gap: 2rem;
     .user-con{
         height: 100px;

@@ -11,7 +11,7 @@ export const GlobalProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [username, setUsername] = useState([]);
   const [error, setError] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState([false]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   //calculate incomes
   const addIncome = async (income) => {
@@ -151,6 +151,7 @@ export const GlobalProvider = ({ children }) => {
         getUser,
         authUser,
         isAuthenticated,
+        setIsAuthenticated,
         username,
         users,
         error,

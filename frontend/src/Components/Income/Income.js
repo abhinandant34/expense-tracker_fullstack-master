@@ -8,6 +8,7 @@ import { rupee } from '../../utils/Icons';
 
 function Income() {
     const {addIncome,incomes, getIncomes, deleteIncome, totalIncome,username} = useGlobalContext()
+
     useEffect(() =>{
         getIncomes(username)
     }, [addIncome])

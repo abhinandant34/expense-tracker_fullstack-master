@@ -8,12 +8,7 @@ exports.addUser = async (req, res) => {
         password
     })
 
-    try {
-        //validations
-        if(!name || !username || !password){
-            return res.status(400).json({message: 'All fields are required!'})
-        }
-    
+    try {   
         const existingUser = await UserSchema.findOne({username});
         if (existingUser) {
             return res.status(400).json({message: 'Username already exists!'})

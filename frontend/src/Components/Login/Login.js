@@ -48,6 +48,7 @@ function Login() {
         });
         navigate("/dashboard");
       } else {
+        console.log("hello world")
         setError("Wrong Username or Password."); // Set an error message for failed authentication
       }
     } else {

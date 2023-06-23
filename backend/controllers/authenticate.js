@@ -22,9 +22,10 @@ exports.authUser = async (req, res) =>{
 }
 
 exports.getUser = async (req,res) =>{
+    const {username} = req.body
     try {
-        const user = await UserSchema.find()
-        res.status(200).json(user)
+        const users = await UserSchema.findOne(username)
+        res.status(200).json(users)
     } catch (error) {
         res.status(500).json({message: 'Server Error'})
     }

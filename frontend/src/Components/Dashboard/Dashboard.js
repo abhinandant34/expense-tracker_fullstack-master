@@ -1,6 +1,7 @@
 import React, { useEffect,useState } from 'react'
 import styled from 'styled-components'
 import { useGlobalContext } from '../../context/globalContext';
+import { useNavigate } from "react-router-dom";
 import History from '../../History/History';
 import { InnerLayout } from '../../styles/Layouts';
 import { rupee } from '../../utils/Icons';
@@ -9,16 +10,18 @@ import Chart from '../Chart/Chart';
 function Dashboard() {
     const [incomesLoaded, setIncomesLoaded] = useState(false);
     const [expensesLoaded, setExpensesLoaded] = useState(false);  
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses,username } = useGlobalContext()
-  
+    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses,username,isAuthenticated } = useGlobalContext()
+    const navigate = useNavigate();
     useEffect(() => {
         getIncomes(username)
         getExpenses(username)
         setIncomesLoaded(true)
         setExpensesLoaded(true)
       }, [])
-  
+  if(isAuthenticated)
+  {
     return (
+        
         <DashboardStyled>
             <InnerLayout>
                 <h1>All Transactions</h1>
@@ -78,6 +81,11 @@ function Dashboard() {
             </InnerLayout>
         </DashboardStyled>
     )
+}
+else
+{
+    navigate('/');
+}
 }
 
 const DashboardStyled = styled.div`

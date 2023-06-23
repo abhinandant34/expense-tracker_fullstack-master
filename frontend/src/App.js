@@ -13,7 +13,7 @@ import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useGlobalContext } from './context/globalContext';
 
 function App() {
-  const {username} = useGlobalContext()
+  const {username, isAuthenticated} = useGlobalContext()
   const [active, setActive] = useState(1)
 
   const global = useGlobalContext()
@@ -41,10 +41,10 @@ function App() {
       {orbMemo}
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login />}/>
+            <Route path="/" element={<Login />  }/>
              <Route path="/signup" element={<Signup/>}/>   {/*username ? <Navigate to='/dashboard'/> :  */}
             {console.log("app ", username)}
-            <Route path="/dashboard" element={ 
+            <Route path="/dashboard" element={ isAuthenticated ?
               <MainLayout>
                 <Navigation 
                       active={active} 
@@ -54,7 +54,7 @@ function App() {
                   <main>
                     {displayData()}
                   </main>
-              </MainLayout> }/>
+              </MainLayout> : <Login/>}/>
             </Routes>
         </BrowserRouter>
     </AppStyled>

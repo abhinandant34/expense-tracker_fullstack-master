@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useGlobalContext } from "../../context/globalContext";
 import Button from "../Button/Button";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const { authUser,isAuthenticated, error, setError } = useGlobalContext();
+  const { authUser, isAuthenticated, error, setError } = useGlobalContext();
   const [inputState, setInputState] = useState({
     username: "",
     password: "",
@@ -38,24 +38,18 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const loginError = validateForm(inputState);
-  
+
     if (!loginError || state) {
-      await authUser(inputState);
-      if (isAuthenticated) {
+     await authUser(inputState);
         setInputState({
           username: "",
           password: "",
         });
-        navigate("/dashboard");
-      } else {
-        console.log("hello world")
-        setError("Wrong Username or Password."); // Set an error message for failed authentication
-      }
+        await navigate("/dashboard");
     } else {
       setLoginError(loginError);
     }
   };
-  
 
   return (
     <FormStyled onSubmit={handleSubmit}>

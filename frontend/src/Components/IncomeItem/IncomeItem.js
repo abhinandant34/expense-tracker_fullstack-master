@@ -16,17 +16,16 @@ function IncomeItem({
   type,
 }) {
   console.log("type", type);
-  const { deleteIncome } = useGlobalContext();
-  function deleteItem(incomeId) {
-    // Show an alert message to confirm that the user wants to delete the income item.
+  const { deleteIncome,deleteExpense } = useGlobalContext();
+  function deleteItem(id) {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this income item?"
+      "Are you sure you want to delete this transaction?"
     );
-
-    // If the user confirms, delete the income item.
-    if (confirmDelete) {
-      // Delete the income item from the database.
-      deleteIncome(incomeId);
+    if (confirmDelete && type==='income') {
+      deleteIncome(id);
+    }
+    if (confirmDelete && type==='expense') {
+      deleteExpense(id);
     }
   }
   return (

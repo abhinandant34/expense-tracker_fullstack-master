@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 function Signup() {
   const { addUser, error, setError } = useGlobalContext();
   const [formError, setFromError] = useState({});
+  const [state, setState] = useState(false);
   const [inputState, setInputState] = useState({
     name: "",
     username: "",
@@ -25,33 +26,43 @@ function Signup() {
 
     if (!addDetails.username && !addDetails.password && !addDetails.name) {
       error.reason = "Enter Signup credentials";
-    }
-    else if (!addDetails.name) {
-        error.reason = "Name is required";
-    } 
-    else if (!addDetails.username) {
+    } else if (!addDetails.name) {
+      error.reason = "Name is required";
+    } else if (!addDetails.username) {
       error.reason = "Username is required";
-    } 
-    else if (!addDetails.password) {
+    } else if (!addDetails.password) {
       error.reason = "Password is required";
-    } 
+    } else {
+      setState(true);
+    }
     return error;
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formError = validateForm(inputState);
-    if(!formError)
-    {
+    if (!formError || state) {
+      try {
         addUser(inputState);
-    setInputState({
-      name: "",
-      username: "",
-      password: "",
-    });
-    navigate("/");
-    }
-    else{
-        setFromError(formError);
+        setInputState({
+          name: "",
+          username: "",
+          password: "",
+        });
+        navigate("/");
+      } catch (error) {
+        if (
+          error.response.status === 400 &&
+          error.response.data.error === "Username already exists"
+        ) {
+          setFromError({
+            reason: "Username already exists",
+          });
+        } else {
+          throw error;
+        }
+      }
+    } else {
+      setFromError(formError);
     }
   };
 

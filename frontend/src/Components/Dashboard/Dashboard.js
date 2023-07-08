@@ -7,14 +7,15 @@ import { InnerLayout } from '../../styles/Layouts';
 import { rupee } from '../../utils/Icons';
 import Chart from '../Chart/Chart';
 
+
 function Dashboard() {
     const [incomesLoaded, setIncomesLoaded] = useState(false);
     const [expensesLoaded, setExpensesLoaded] = useState(false);  
-    const {totalExpenses,incomes, expenses, totalIncome, totalBalance, getIncomes, getExpenses,username,isAuthenticated } = useGlobalContext()
+    const {defaultFiltersTransactions, totalExpenses,incomes, expenses, totalIncome, totalBalance, getTransactions, getExpenses,username,isAuthenticated } = useGlobalContext()
     const navigate = useNavigate();
     useEffect(() => {
-        getIncomes(username)
-        getExpenses(username)
+        getTransactions(defaultFiltersTransactions)
+        
         setIncomesLoaded(true)
         setExpensesLoaded(true)
       }, [])

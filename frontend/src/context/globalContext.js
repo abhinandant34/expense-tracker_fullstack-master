@@ -1,51 +1,64 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
+import * as XLSX from "xlsx";
 
-const BASE_URL = "http://localhost:5000/api/v1/";
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+console.log("Base Here: " + BASE_URL);
 
 const GlobalContext = React.createContext();
 
 export const GlobalProvider = ({ children }) => {
-  const [incomes, setIncomes] = useState([]);
-  const [expenses, setExpenses] = useState([]);
+  const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState([]);
+  const [username, setUsername] = useState("karuna");
   const [error, setError] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  //calculate incomes
-  const addIncome = async (income) => {
+  const defaultFiltersTransactions = {
+    title: username, 
+    amount: "",
+    type: "",
+    description: "",
+    date: "",
+  };
+
+  //Transactions
+  const addTransaction = async (transaction) => {
     const response = await axios
-      .post(`${BASE_URL}add-income`, income)
+      .post(`${BASE_URL}add-transaction/`, transaction)
       .catch((err) => {
         setError(err.response.data.message);
       });
-    getIncomes();
+    getTransactions({ username: username, amount: "" });
   };
 
-  const getallIncomes = async (username) => {
-    const response = await axios.get(`${BASE_URL}get-all-incomes/`);
-    setIncomes(response.data);
-    console.log(response.data);
+  const getTransactions = async (searchParams) => {
+    const response = await axios
+      .post(`${BASE_URL}get-transactions`, searchParams)
+      .then((response) => {
+        //console.log(response.data);
+        setTransactions(response.data);
+      });
   };
 
-  const getIncomes = async (username) => {
-    if (username === "admin") getallIncomes();
-    else {
-      const response = await axios.get(`${BASE_URL}get-incomes/${username}`);
-      setIncomes(response.data);
-      console.log(response.data);
-    }
+  const getallTransactions = async (username) => {
+    const response = await axios.get(`${BASE_URL}get-all-transactions/`);
+    setTransactions(response.data);
+    //console.log(response.data);
   };
 
-  const deleteIncome = async (id) => {
-    const res = await axios.delete(`${BASE_URL}delete-income/${id}`);
-    getIncomes();
+  const deleteTransaction = async (id) => {
+    const res = await axios.delete(`${BASE_URL}delete-transaction/${id}`);
+    getTransactions();
   };
 
   const totalIncome = () => {
+    const creditTransactions = transactions.filter(
+      (transaction) => transaction.type === "Credit"
+    );
     let totalIncome = 0;
-    incomes.forEach((income) => {
+    creditTransactions.forEach((income) => {
       totalIncome = totalIncome + income.amount;
     });
 
@@ -53,38 +66,12 @@ export const GlobalProvider = ({ children }) => {
   };
 
   //calculate incomes
-  const addExpense = async (income) => {
-    const response = await axios
-      .post(`${BASE_URL}add-expense`, income)
-      .catch((err) => {
-        setError(err.response.data.message);
-      });
-    getExpenses();
-  };
-
-  const getallExpenses = async () => {
-    const response = await axios.get(`${BASE_URL}get-all-expenses`);
-    setExpenses(response.data);
-    console.log(response.data);
-  };
-
-  const getExpenses = async (username) => {
-    if (username === "admin") getallExpenses();
-    else {
-      const response = await axios.get(`${BASE_URL}get-expenses/${username}`);
-      setExpenses(response.data);
-      console.log(response.data);
-    }
-  };
-
-  const deleteExpense = async (id) => {
-    const res = await axios.delete(`${BASE_URL}delete-expense/${id}`);
-    getExpenses();
-  };
-
   const totalExpenses = () => {
     let totalIncome = 0;
-    expenses.forEach((income) => {
+    const debitTransactions = transactions.filter(
+      (transaction) => transaction.type === "Debit"
+    );
+    debitTransactions.forEach((income) => {
       totalIncome = totalIncome + income.amount;
     });
 
@@ -96,12 +83,49 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const transactionHistory = () => {
-    const history = [...incomes, ...expenses];
+    const history = [...transactions];
     history.sort((a, b) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     return history.slice(0, 8);
+  };
+
+  const downloadTransactions = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}get-all-transactions/`);
+      const transactions = response.data;
+
+      // Create a new workbook and worksheet
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(transactions);
+
+      // Add the worksheet to the workbook
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
+
+      // Generate an Excel file buffer
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      // Create a Blob from the buffer
+      const blob = new Blob([excelBuffer], {
+        type:
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
+      // Create a download link and click it programmatically
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "transactions.xlsx";
+      link.click();
+
+      console.log("Transactions exported successfully");
+    } catch (error) {
+      console.error("Error exporting transactions:", error);
+    }
   };
 
   //Users
@@ -127,7 +151,7 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const getUser = async (username) => {
-    const response = await axios.get(`${BASE_URL}get-user`,username);
+    const response = await axios.get(`${BASE_URL}get-user`, username);
     setUsers(response.data);
     console.log(response.data);
   };
@@ -135,18 +159,16 @@ export const GlobalProvider = ({ children }) => {
   return (
     <GlobalContext.Provider
       value={{
-        addIncome,
-        getIncomes,
-        incomes,
-        deleteIncome,
-        expenses,
+        addTransaction,
+        getTransactions,
+        getallTransactions,
+        deleteTransaction,
+        transactions,
         totalIncome,
-        addExpense,
-        getExpenses,
-        deleteExpense,
         totalExpenses,
         totalBalance,
         transactionHistory,
+        downloadTransactions,
         addUser,
         getUser,
         authUser,
@@ -156,6 +178,7 @@ export const GlobalProvider = ({ children }) => {
         users,
         error,
         setError,
+        defaultFiltersTransactions
       }}
     >
       {children}

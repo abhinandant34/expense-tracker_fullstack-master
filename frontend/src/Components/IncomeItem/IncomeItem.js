@@ -15,18 +15,20 @@ function IncomeItem({
   indicatorColor,
   type,
 }) {
-  console.log("type", type);
-  const { deleteIncome,deleteExpense } = useGlobalContext();
+  const {deleteTransaction } = useGlobalContext();
   function deleteItem(id) {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this transaction?"
     );
-    if (confirmDelete && type==='income') {
-      deleteIncome(id);
-    }
-    if (confirmDelete && type==='expense') {
-      deleteExpense(id);
-    }
+      deleteTransaction(id);
+  }
+  if(type==="Credit")
+  {
+    indicatorColor="var(--color-green)";
+  }
+  else if(type="Debit")
+  {
+    indicatorColor="red";
   }
   return (
     <IncomeItemStyled indicator={indicatorColor}>
@@ -39,6 +41,9 @@ function IncomeItem({
             </p>
             <p>
               {calender} {dateFormat(date)}
+            </p>
+            <p>
+              {type}
             </p>
             <p>
               {comment}

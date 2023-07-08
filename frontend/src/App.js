@@ -6,10 +6,10 @@ import Orb from "./Components/Orb/Orb";
 import Navigation from "./Components/Navigation/Navigation";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import Income from "./Components/Income/Income";
-import Expenses from "./Components/Expenses/Expenses";
 import Signup from "./Components/Signup/Signup";
 import Login from "./Components/Login/Login";
 import Protected from "./utils/Protected";
+import Download from "./Components/Download/Download";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useGlobalContext } from "./context/globalContext";
 
@@ -28,7 +28,7 @@ function App() {
       case 2:
         return <Income />;
       case 3:
-        return <Expenses />;
+        return <Download />;        
       default:
         return <Dashboard />;
     }
@@ -46,7 +46,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />{" "}
 
-          { console.log("Authenticated " + isAuthenticated)}
+          {/* { console.log("Authenticated " + isAuthenticated)} */}
           
           <Route
             path="/dashboard"

@@ -11,12 +11,12 @@ const GlobalContext = React.createContext();
 export const GlobalProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState("karuna");
+  const [username, setUsername] = useState([]);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const defaultFiltersTransactions = {
-    title: username, 
+    title: username,
     amount: "",
     type: "",
     description: "",
@@ -31,6 +31,24 @@ export const GlobalProvider = ({ children }) => {
         setError(err.response.data.message);
       });
     getTransactions({ username: username, amount: "" });
+  };
+
+  const uploadFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    try {
+      const response = await axios.post(`${BASE_URL}upload-file/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      getTransactions({ username: username, amount: "" });
+      console.log("File uploaded successfully");
+      // Handle the response or perform any necessary operations
+    } catch (error) {
+      setError(error.response.data.message);
+      // Handle the error or display an error message to the user
+    }
   };
 
   const getTransactions = async (searchParams) => {
@@ -162,6 +180,7 @@ export const GlobalProvider = ({ children }) => {
         addTransaction,
         getTransactions,
         getallTransactions,
+        uploadFile,
         deleteTransaction,
         transactions,
         totalIncome,
@@ -178,7 +197,7 @@ export const GlobalProvider = ({ children }) => {
         users,
         error,
         setError,
-        defaultFiltersTransactions
+        defaultFiltersTransactions,
       }}
     >
       {children}

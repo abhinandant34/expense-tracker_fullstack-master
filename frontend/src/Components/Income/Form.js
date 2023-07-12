@@ -8,8 +8,7 @@ import { plus } from "../../utils/Icons";
 
 function Form() {
   const {
-    addIncome,
-    getIncomes,
+    uploadFile,
     error,
     setError,
     username,
@@ -21,17 +20,24 @@ function Form() {
     type: "",
     date: "",
     description: "",
+    file: null, // Added file state
   });
 
-  const { amount, type, date, description } = inputState;
+  const { amount, type, date, description, file } = inputState;
 
   const handleInput = (name) => (e) => {
     setInputState({ ...inputState, [name]: e.target.value });
     setError("");
   };
 
+  const handleFileUpload = (e) => {
+    const uploadedFile = e.target.files[0];
+    setInputState({ ...inputState, file: uploadedFile });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(date);
     addTransaction({
       title: username,
       amount: amount,
@@ -45,7 +51,15 @@ function Form() {
       amount: "",
       date: "",
       description: "",
+      file: null, // Reset the file state
     });
+  };
+
+  const handleUpload = (e) => {
+    e.preventDefault();
+    if (file) {
+      uploadFile(file);
+    }
   };
 
   return (
@@ -66,7 +80,7 @@ function Form() {
           value={amount}
           type="text"
           name={"amount"}
-          placeholder={"Credit Amount"}
+          placeholder={"Amount"}
           onChange={handleInput("amount")}
         />
       </div>
@@ -115,14 +129,29 @@ function Form() {
       </div>
       <div className="submit-btn">
         <Button
+          type="submit" // Change the button type to "submit"
           name={"Add Credit"}
           icon={plus}
           bPad={".8rem 1.6rem"}
           bRad={"30px"}
-          bg={"var(--color-accent"}
+          bg={"var(--color-accent)"}
           color={"#fff"}
         />
       </div>
+
+      <div>Upload a file</div>
+      <form > 
+        <input type="file" name="file" onChange={handleFileUpload} />
+        <Button
+          type="submit" // Change the button type to "submit"
+          name={"Upload File"}
+          bPad={".8rem 1.6rem"}
+          bRad={"30px"}
+          bg={"var(--color-accent)"}
+          color={"#fff"}
+          onClick={handleUpload}
+        />
+      </form>
     </FormStyled>
   );
 }

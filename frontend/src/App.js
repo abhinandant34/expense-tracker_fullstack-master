@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, {useState, useMemo} from "react";
 import styled from "styled-components";
 import bg from "./img/bg.png";
-import { MainLayout } from "./styles/Layouts";
+import {MainLayout} from "./styles/Layouts";
 import Orb from "./Components/Orb/Orb";
 import Navigation from "./Components/Navigation/Navigation";
 import Dashboard from "./Components/Dashboard/Dashboard";
@@ -10,64 +10,62 @@ import Signup from "./Components/Signup/Signup";
 import Login from "./Components/Login/Login";
 import Protected from "./utils/Protected";
 import Download from "./Components/Download/Download";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useGlobalContext } from "./context/globalContext";
+import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {useGlobalContext} from "./context/globalContext";
 
 function App() {
-  const { username, isAuthenticated } = useGlobalContext();
-  const [active, setActive] = useState(1);
+    const {username, isAuthenticated} = useGlobalContext();
+    const [active, setActive] = useState(1);
 
-  //const global = useGlobalContext();
-  //console.log(global);
- 
+    //const global = useGlobalContext();
+    //console.log(global);
+    const displayData = () => {
+        switch (active) {
+            case 1:
+                return <Dashboard/>;
+            case 2:
+                return <Income/>;
+            case 3:
+                return <Download/>;
+            default:
+                return <Dashboard/>;
+        }
+    };
 
-  const displayData = () => {
-    switch (active) {
-      case 1:
-        return <Dashboard />;
-      case 2:
-        return <Income />;
-      case 3:
-        return <Download />;        
-      default:
-        return <Dashboard />;
-    }
-  };
+    const orbMemo = useMemo(() => {
+        return <Orb/>;
+    }, []);
 
-  const orbMemo = useMemo(() => {
-    return <Orb />;
-  }, []);
+    return (
+        <AppStyled bg={bg} className="App">
+            {/*{orbMemo}*/}
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Login/>}/>
+                    <Route path="/signup" element={<Signup/>}/>{" "}
 
-  return (
-    <AppStyled bg={bg} className="App">
-      {orbMemo}
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />{" "}
+                    {/* { console.log("Authenticated " + isAuthenticated)} */}
 
-          {/* { console.log("Authenticated " + isAuthenticated)} */}
-          
-          <Route
-            path="/dashboard"
-            element={
-              <Protected isLoggedIn={isAuthenticated}>
-                <MainLayout>
-                  <Navigation
-                    active={active}
-                    setActive={setActive}
-                    user={username}
-                  />
-                  <main>{displayData()}</main>
-                </MainLayout>
-              </Protected>
-            }
-          />
-        
-        </Routes>
-      </BrowserRouter>
-    </AppStyled>
-  );
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <Protected isLoggedIn={isAuthenticated}>
+                                <MainLayout>
+                                    <Navigation
+                                        active={active}
+                                        setActive={setActive}
+                                        user={username}
+                                    />
+                                    <main>{displayData()}</main>
+                                </MainLayout>
+                            </Protected>
+                        }
+                    />
+
+                </Routes>
+            </BrowserRouter>
+        </AppStyled>
+    );
 }
 
 const AppStyled = styled.div`

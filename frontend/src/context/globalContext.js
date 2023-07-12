@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
 
-const BASE_URL = process.env.REACT_APP_BASE_URL;
+export const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 console.log("Base Here: " + BASE_URL);
 
@@ -11,7 +11,7 @@ const GlobalContext = React.createContext();
 export const GlobalProvider = ({ children }) => {
   const [transactions, setTransactions] = useState([]);
   const [users, setUsers] = useState([]);
-  const [username, setUsername] = useState([]);
+  const [username, setUsername] = useState(["karuna"]);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(true);
 
@@ -147,7 +147,6 @@ export const GlobalProvider = ({ children }) => {
   };
 
   //Users
-
   const addUser = async (user) => {
     const response = await axios
       .post(`${BASE_URL}signup-user`, user)
